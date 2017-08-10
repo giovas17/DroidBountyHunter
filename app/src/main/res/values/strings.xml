@@ -10,6 +10,8 @@
     <string name="boton_capturar">Capturar</string>
     <string name="boton_eliminar">Eliminar</string>
     <string name="campo_nombre">Nombre del Fugitivo</string>
+    <string name="title_activity_agregar">Nuevo Fugitivo</string>
+    <string name="title_activity_detalle">Detalle Fugitivo</string>
 </resources>
 
 

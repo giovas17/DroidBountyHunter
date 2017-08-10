@@ -15,10 +15,13 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Agregar"
+            android:label="@string/title_activity_agregar"/>
+        <activity android:name=".Detalle"
+            android:label="@string/title_activity_detalle"/>
     </application>
 
 </manifest>

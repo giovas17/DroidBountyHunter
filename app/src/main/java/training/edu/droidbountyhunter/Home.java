@@ -1,5 +1,6 @@
 package training.edu.droidbountyhunter;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,7 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import training.edu.fragment.About;
 
 public class Home extends AppCompatActivity {
 
@@ -30,6 +36,7 @@ public class Home extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private Fragment[] fragments;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -58,8 +65,8 @@ public class Home extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(Home.this, Agregar.class);
+                startActivity(intent);
             }
         });
 
@@ -75,13 +82,9 @@ public class Home extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.menu_agregar) {
+            Intent intent = new Intent(this, Agregar.class);
+            startActivity(intent);
             return true;
         }
 
@@ -89,37 +92,53 @@ public class Home extends AppCompatActivity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
+     * Fragment multiuso para mostrar la lista de Fugitivos o Capturados acorde
+     * al argumento indicado.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class ListFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final String ARG_SECTION_TEXT = "section_text";
 
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
+        public ListFragment() {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            // Se hace referencia al Fragment generado por XML en los Layouts y
+            // se instancia en una View...
+            View view = inflater.inflate(R.layout.fragment_list, container, false);
+
+            String[] data = new String[6];
+            Bundle args = this.getArguments();
+            final int mode = args.getInt(ListFragment.ARG_SECTION_NUMBER);
+
+            // Datos en HardCode...
+            data[0] = "Armando Olmos";
+            data[1] = "Guillermo Ortega";
+            data[2] = "Carlos Martinez";
+            data[3] = "Moises Rivas";
+            data[4] = "Adrian Rubiera";
+            data[5] = "Victor Medina";
+
+            ListView list = (ListView) view.findViewById(R.id.lista);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                    android.R.layout.simple_list_item_1,data);
+            list.setAdapter(adapter);
+            // Se genera el Listener para el detalle de cada elemento...
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(getContext(),Detalle.class);
+                    intent.putExtra("title",((TextView)view).getText());
+                    intent.putExtra("mode",mode);
+                    startActivity(intent);
+                }
+            });
+            return view;
         }
     }
 
@@ -131,13 +150,24 @@ public class Home extends AppCompatActivity {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            fragments = new Fragment[3];
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            // Return a ListFragment (defined as a static inner class below).
+            if (fragments[position] == null){
+                if (position < 2){
+                    fragments[position] = new ListFragment();
+                    Bundle arguments = new Bundle();
+                    arguments.putInt("mode",position);
+                    fragments[position].setArguments(arguments);
+                }else {
+                    fragments[position] = new About();
+                }
+            }
+            return fragments[position];
         }
 
         @Override
