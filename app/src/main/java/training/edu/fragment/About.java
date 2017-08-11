@@ -18,11 +18,15 @@ import training.edu.droidbountyhunter.R;
 public class About extends Fragment {
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_about, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
+        // Se hace referencia al Fragment generado por XML en los Layouts y
+        // se instanc’a en una View...
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
+        // Se accede a los elementos ajustables del Fragment...
         RatingBar ratingBar = (RatingBar)view.findViewById(R.id.ratingBar);
-        String rating_string = "0.0";
+        String rating_string = "0.0"; // Variable para lectura del Rating guardado en el property
         try {
             if (System.getProperty("rating") != null){
                 rating_string = System.getProperty("rating");
@@ -34,6 +38,7 @@ public class About extends Fragment {
             rating_string = "0.0";
         }
         ratingBar.setRating(Float.valueOf(rating_string));
+        // Listener al Raiting para la actualizacion de la property...
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
