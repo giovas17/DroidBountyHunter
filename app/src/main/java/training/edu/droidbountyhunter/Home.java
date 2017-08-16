@@ -23,7 +23,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import training.edu.data.DBProvider;
 import training.edu.fragment.About;
+import training.edu.models.Fugitivo;
 
 public class Home extends AppCompatActivity {
 
@@ -91,6 +95,17 @@ public class Home extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void UpdateLists(int index){
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(index);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UpdateLists(requestCode);
+    }
+
     /**
      * Fragment multiuso para mostrar la lista de Fugitivos o Capturados acorde
      * al argumento indicado.
@@ -112,33 +127,40 @@ public class Home extends AppCompatActivity {
             // se instancia en una View...
             View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-            String[] data = new String[6];
             Bundle args = this.getArguments();
-            final int mode = args.getInt(ListFragment.ARG_SECTION_NUMBER);
+            final int mode = args.getInt("mode");
 
-            // Datos en HardCode...
-            data[0] = "Armando Olmos";
-            data[1] = "Guillermo Ortega";
-            data[2] = "Carlos Martinez";
-            data[3] = "Moises Rivas";
-            data[4] = "Adrian Rubiera";
-            data[5] = "Victor Medina";
-
-            ListView list = (ListView) view.findViewById(R.id.lista);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                    android.R.layout.simple_list_item_1,data);
-            list.setAdapter(adapter);
+            final ListView list = (ListView) view.findViewById(R.id.lista);
+            UpdateList(list, mode);
             // Se genera el Listener para el detalle de cada elemento...
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getContext(),Detalle.class);
-                    intent.putExtra("title",((TextView)view).getText());
-                    intent.putExtra("mode",mode);
-                    startActivity(intent);
+                    ArrayList<Fugitivo> fugitivos = (ArrayList<Fugitivo>) list.getTag();
+                    Fugitivo fugitivo = fugitivos.get(position);
+                    Intent intent = new Intent(getContext(), Detalle.class);
+                    intent.putExtra("title", fugitivo.getName());
+                    intent.putExtra("mode", mode);
+                    intent.putExtra("id", fugitivo.getId());
+                    startActivityForResult(intent,mode);
                 }
             });
             return view;
+        }
+
+        private void UpdateList(ListView list, int mode){
+            DBProvider database = new DBProvider(getContext());
+            ArrayList<Fugitivo> fugitivos = database.GetFugitivos(mode == 1);
+            if (fugitivos.size() > 0){
+                String[] data = new String[fugitivos.size()];
+                for (int i = 0 ; i < fugitivos.size() ; i++){
+                    data[i] = fugitivos.get(i).getName();
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                        android.R.layout.simple_list_item_1, data);
+                list.setAdapter(adapter);
+                list.setTag(fugitivos);
+            }
         }
     }
 

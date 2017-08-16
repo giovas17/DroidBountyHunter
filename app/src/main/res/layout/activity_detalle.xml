@@ -19,12 +19,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Capturar"/>
+        android:text="Capturar"
+        android:onClick="OnCaptureClick"/>
 
     <Button
         android:id="@+id/buttonEliminar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Eliminar"/>
+        android:text="Eliminar"
+        android:onClick="OnDeleteClick"/>
 
 </LinearLayout>
