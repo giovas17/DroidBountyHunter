@@ -44,15 +44,15 @@ public class Detalle extends AppCompatActivity{
 
     public void OnCaptureClick(View view) {
         DBProvider database = new DBProvider(this);
-        database.UpdateFugitivo(new Fugitivo(id,titulo,String.valueOf(mode)));
-        setResult(0);
+        database.UpdateFugitivo(new Fugitivo(id,titulo,"1"));
+        setResult(mode);
         finish();
     }
 
     public void OnDeleteClick(View view) {
         DBProvider database = new DBProvider(this);
         database.DeleteFugitivo(id);
-        setResult(0);
+        setResult(mode);
         finish();
     }
 }

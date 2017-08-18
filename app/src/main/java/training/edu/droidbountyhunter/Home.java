@@ -88,7 +88,7 @@ public class Home extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_agregar) {
             Intent intent = new Intent(this, Agregar.class);
-            startActivity(intent);
+            startActivityForResult(intent,0);
             return true;
         }
 
@@ -161,6 +161,11 @@ public class Home extends AppCompatActivity {
                 list.setAdapter(adapter);
                 list.setTag(fugitivos);
             }
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
