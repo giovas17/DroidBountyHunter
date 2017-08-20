@@ -36,8 +36,8 @@ public class Detalle extends AppCompatActivity{
         if (mode == 0){
             message.setText("El fugitivo sigue suelto...");
         }else {
-            Button delete = (Button)findViewById(R.id.buttonAgregar);
-            delete.setVisibility(View.GONE);
+            Button add = (Button)findViewById(R.id.buttonAgregar);
+            add.setVisibility(View.GONE);
             message.setText("Atrapado!!!");
         }
     }
