@@ -108,6 +108,16 @@ public class DBProvider {
         close();
     }
 
+    public int ContarFugitivos(){
+        Cursor cursor = querySQL("SELECT " + COLUMN_NAME_ID + " FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_STATUS + "=?"
+                ,new String[]{"0"});
+        if (cursor != null){
+            return cursor.getCount();
+        }else {
+            return 0;
+        }
+    }
+
     private static class DBHelper extends SQLiteOpenHelper{
 
         public DBHelper(Context context) {
