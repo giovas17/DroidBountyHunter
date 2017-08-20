@@ -98,7 +98,7 @@ public class DBProvider {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME_NAME, fugitivo.getName());
         values.put(COLUMN_NAME_STATUS, fugitivo.getStatus());
-        database.update(TABLE_NAME,values,COLUMN_NAME_NAME + "=?",new String[]{String.valueOf(fugitivo.getId())});
+        database.update(TABLE_NAME,values,COLUMN_NAME_NAME + "=?",new String[]{String.valueOf(fugitivo.getName())});
         close();
     }
 

@@ -70,7 +70,7 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Home.this, Agregar.class);
-                startActivity(intent);
+                startActivityForResult(intent,0);
             }
         });
 
