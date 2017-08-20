@@ -7,5 +7,5 @@ package training.edu.interfaces;
 
 public interface OnTaskListener {
     void OnTaskCompleted(String response);
-    void OnTaskError(int errorCode, String message);
+    void OnTaskError(int errorCode, String message, String error);
 }

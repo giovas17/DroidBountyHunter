@@ -74,6 +74,9 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        DBProvider database = new DBProvider(this);
+
+
     }
 
 
