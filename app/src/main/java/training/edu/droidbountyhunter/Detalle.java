@@ -1,7 +1,10 @@
 package training.edu.droidbountyhunter;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +19,9 @@ import training.edu.data.DBProvider;
 import training.edu.interfaces.OnTaskListener;
 import training.edu.models.Fugitivo;
 import training.edu.network.NetServices;
+import training.edu.utilities.PictureTools;
+
+import static training.edu.utilities.PictureTools.MEDIA_TYPE_IMAGE;
 
 /**
  * @author Giovani González
@@ -27,6 +33,7 @@ public class Detalle extends AppCompatActivity{
     private String titulo;
     private int mode;
     private int id;
+    private static final int REQUEST_CODE_PHOTO_IMAGE = 1787;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,5 +99,23 @@ public class Detalle extends AppCompatActivity{
             }
         });
         builder.show();
+    }
+
+    public void OnFotoClick(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri pathImage = PictureTools.with(Detalle.this).getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,pathImage);
+        startActivityForResult(intent,REQUEST_CODE_PHOTO_IMAGE);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_PHOTO_IMAGE){
+            if (resultCode == RESULT_OK){
+
+            }
+        }
     }
 }

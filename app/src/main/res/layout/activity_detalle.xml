@@ -6,6 +6,15 @@
     android:gravity="center|top"
     android:padding="@dimen/activity_horizontal_margin">
 
+    <ImageView
+        android:id="@+id/pictureFugitive"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:maxHeight="200dp"
+        android:maxWidth="200dp"
+        android:minWidth="200dp"
+        android:minHeight="200dp"/>
+
     <TextView
         android:id="@+id/mensajeText"
         android:layout_width="wrap_content"
@@ -28,5 +37,10 @@
         android:layout_height="wrap_content"
         android:text="Eliminar"
         android:onClick="OnDeleteClick"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/boton_foto"
+        android:onClick="OnFotoClick"/>
 
 </LinearLayout>
