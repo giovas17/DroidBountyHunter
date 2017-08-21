@@ -74,7 +74,8 @@ public class Detalle extends AppCompatActivity{
 
     public void OnCaptureClick(View view) {
         DBProvider database = new DBProvider(this);
-        database.UpdateFugitivo(new Fugitivo(id,titulo,"1",""));
+        String pathPhoto = PictureTools.currentPhotoPath;
+        database.UpdateFugitivo(new Fugitivo(id,titulo,"1",pathPhoto.length() == 0 ? "" : pathPhoto));
         NetServices apiCall = new NetServices(new OnTaskListener() {
             @Override
             public void OnTaskCompleted(String response) {

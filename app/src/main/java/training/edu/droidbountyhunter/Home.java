@@ -91,7 +91,7 @@ public class Home extends AppCompatActivity {
                         for (int i = 0 ; i < array.length() ; i++){
                             JSONObject object = array.getJSONObject(i);
                             String nameFugitive = object.optString("name","");
-                            database.InsertFugitivo(new Fugitivo(0,nameFugitive,"0"));
+                            database.InsertFugitivo(new Fugitivo(0,nameFugitive,"0",""));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -176,6 +176,7 @@ public class Home extends AppCompatActivity {
                     intent.putExtra("title", fugitivo.getName());
                     intent.putExtra("mode", mode);
                     intent.putExtra("id", fugitivo.getId());
+                    intent.putExtra("photo", fugitivo.getPhoto());
                     startActivityForResult(intent,mode);
                 }
             });
