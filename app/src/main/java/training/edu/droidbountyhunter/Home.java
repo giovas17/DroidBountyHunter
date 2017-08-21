@@ -22,12 +22,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import training.edu.data.DBProvider;
 import training.edu.fragment.About;
+import training.edu.interfaces.OnTaskListener;
 import training.edu.models.Fugitivo;
+import training.edu.network.NetServices;
 
 public class Home extends AppCompatActivity {
 
@@ -74,8 +81,32 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        DBProvider database = new DBProvider(this);
+        final DBProvider database = new DBProvider(this);
+        if (database.ContarFugitivos() == 0){
+            NetServices apiCall = new NetServices(new OnTaskListener() {
+                @Override
+                public void OnTaskCompleted(String response) {
+                    try {
+                        JSONArray array = new JSONArray(response);
+                        for (int i = 0 ; i < array.length() ; i++){
+                            JSONObject object = array.getJSONObject(i);
+                            String nameFugitive = object.optString("name","");
+                            database.InsertFugitivo(new Fugitivo(0,nameFugitive,"0"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }finally {
+                        UpdateLists(0);
+                    }
+                }
 
+                @Override
+                public void OnTaskError(int errorCode, String message, String error) {
+                    Toast.makeText(Home.this,"Ocurrió un problema con el Webservice!!",Toast.LENGTH_LONG).show();
+                }
+            });
+            apiCall.execute("Fugitivos");
+        }
 
     }
 
