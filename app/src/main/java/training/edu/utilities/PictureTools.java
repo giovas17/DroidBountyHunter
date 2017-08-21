@@ -1,6 +1,9 @@
 package training.edu.utilities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -9,10 +12,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.BuildConfig;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,10 +28,12 @@ import java.util.Date;
 
 public class PictureTools {
     public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
+    public static final int REQUEST_CODE = 1707;
     private static final String TAG = PictureTools.class.getSimpleName();
+    private static String BASE_PATH = "";
 
     private static PictureTools instance;
+    public static String currentPhotoPath = "";
     private Context context;
 
     public PictureTools() {
@@ -56,45 +63,49 @@ public class PictureTools {
 
     /** Create a file Uri for saving an image or video */
     public static Uri getOutputMediaFileUri(int type){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            return FileProvider.getUriForFile(getInstance().context, getInstance().context.getPackageName() + ".provider",
-                    getOutputMediaFile(type));
-        }else {
-            return Uri.fromFile(getOutputMediaFile(type));
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                return FileProvider.getUriForFile(getInstance().context,
+                        getInstance().context.getPackageName() + ".provider",getOutputMediaFile());
+            }
+            return Uri.fromFile(getOutputMediaFile());
+        }catch (IOException e){
+            return null;
         }
     }
 
     /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
+    private static File getOutputMediaFile() throws IOException {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                .getPath() + File.separator + "DroidBountyHunterPictures" + File.separator);
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES).getPath(),"DroidBountyHunterPictures");
+
+        BASE_PATH = mediaStorageDir.getPath() + File.separator;
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d("DroidBountyHunter", "failed to create directory");
-                return null;
+        if (!mediaStorageDir.exists()){
+            if (!mediaStorageDir.mkdirs()){
+                Log.d("File","No se pudo crear el folder");
             }
         }
 
         // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
-        } else if(type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_"+ timeStamp + ".mp4");
-        } else {
-            return null;
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HHmmss").format(new Date());
+        String path = "PNG_" + timeStamp + ".png";
+        path = path.replace(" ","_");
+        if(path.contains("'")){
+            path = path.replace("'","");
         }
+        String imageFileName = BASE_PATH + path;
+        File image = new File(imageFileName);
 
-        return mediaFile;
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+
+        return image;
     }
 
     private static int getCameraPhotoOrientation(String imagePath){
@@ -163,5 +174,30 @@ public class PictureTools {
             }
         }
         return size_inicialize;
+    }
+
+    public static boolean permissionReadMemmory(Activity context){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                // Should we show an explanation
+                if (ActivityCompat.shouldShowRequestPermissionRationale(context,Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                        ActivityCompat.shouldShowRequestPermissionRationale(context,Manifest.permission.READ_EXTERNAL_STORAGE)){
+                    ActivityCompat.requestPermissions(context,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA},REQUEST_CODE);
+                    return false;
+                }else {
+                    //No explanation needed, we can request the permissions.
+                    ActivityCompat.requestPermissions(context,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA},REQUEST_CODE);
+                    return false;
+                }
+            }else {
+                return true;
+            }
+        }else {
+            return true;
+        }
     }
 }

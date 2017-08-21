@@ -13,7 +13,8 @@
         android:maxHeight="200dp"
         android:maxWidth="200dp"
         android:minWidth="200dp"
-        android:minHeight="200dp"/>
+        android:minHeight="200dp"
+        android:src="@android:drawable/ic_menu_gallery"/>
 
     <TextView
         android:id="@+id/mensajeText"
@@ -37,7 +38,9 @@
         android:layout_height="wrap_content"
         android:text="Eliminar"
         android:onClick="OnDeleteClick"/>
+
     <Button
+        android:id="@+id/buttonPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/boton_foto"
