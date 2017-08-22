@@ -47,4 +47,10 @@
         android:text="@string/boton_foto"
         android:onClick="OnFotoClick"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/boton_mapa"
+        android:onClick="OnMapClick"/>
+
 </LinearLayout>

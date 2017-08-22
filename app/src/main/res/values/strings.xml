@@ -13,6 +13,10 @@
     <string name="title_activity_agregar">Nuevo Fugitivo</string>
     <string name="title_activity_detalle">Detalle Fugitivo</string>
     <string name="boton_foto">Tomar Foto</string>
+
+    <string name="api_key" translatable="false">AIzaSyASxnLPzET0RLNeoFDJw6eIO0hOopxR6lU</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="boton_mapa">Ver Mapa</string>
 </resources>
 
 

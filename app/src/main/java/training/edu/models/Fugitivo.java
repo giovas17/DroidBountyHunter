@@ -10,12 +10,16 @@ public class Fugitivo {
     private String name;
     private String status;
     private String photo;
+    private String latitude;
+    private String longitude;
 
-    public Fugitivo(int id, String name, String status, String photo) {
+    public Fugitivo(int id, String name, String status, String photo, String latitude, String longitude) {
         this.id = id;
         this.name = name;
         this.status = status;
         this.photo = photo;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public int getId() {
@@ -48,5 +52,21 @@ public class Fugitivo {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }

@@ -26,7 +26,7 @@ public class Agregar extends AppCompatActivity{
         TextView name = (TextView)findViewById(R.id.editTextName);
         if (name.getText().toString().length() > 0){
             DBProvider database = new DBProvider(this);
-            database.InsertFugitivo(new Fugitivo(0,name.getText().toString(),"0",""));
+            database.InsertFugitivo(new Fugitivo(0,name.getText().toString(),"0","","",""));
             setResult(0);
             finish();
         }else {

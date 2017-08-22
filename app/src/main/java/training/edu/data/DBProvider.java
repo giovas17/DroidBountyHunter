@@ -22,18 +22,22 @@ public class DBProvider {
     /** --------------------------------- Nombre de Base de Datos -------------------------------------**/
     private static final String DataBaseName = "DroidBountyHunterDataBase";
     /** --------------------------------- Version de Base de Datos ---------------------------------**/
-    private static final int version = 2;
+    private static final int version = 3;
     /** --------------------------------- Tablas y Campos ---------------------------------**/
     private static final String TABLE_NAME = "fugitivos";
     private static final String COLUMN_NAME_ID = "id";
     private static final String COLUMN_NAME_NAME = "name";
     private static final String COLUMN_NAME_STATUS = "status";
     private static final String COLUMN_NAME_PHOTO = "photo";
+    private static final String COLUMN_NAME_LATITUDE = "latitude";
+    private static final String COLUMN_NAME_LONGITUDE = "longitude";
     /** --------------------------------- Declaración de Tablas ----------------------------------**/
     private static final String TFugitivos = "CREATE TABLE " + TABLE_NAME + " (" +
             COLUMN_NAME_ID + " INTEGER PRIMARY KEY NOT NULL, " +
             COLUMN_NAME_NAME + " TEXT NOT NULL, " +
             COLUMN_NAME_PHOTO + " TEXT, " +
+            COLUMN_NAME_LATITUDE + " TEXT, " +
+            COLUMN_NAME_LONGITUDE + " TEXT, " +
             COLUMN_NAME_STATUS + " INTEGER, " +
             "UNIQUE (" + COLUMN_NAME_NAME + ") ON CONFLICT REPLACE);";
     /** --------------------------------- Variables y Helpers ----------------------------------**/
@@ -80,7 +84,9 @@ public class DBProvider {
                 String name = dataCursor.getString(dataCursor.getColumnIndex(COLUMN_NAME_NAME));
                 String status = dataCursor.getString(dataCursor.getColumnIndex(COLUMN_NAME_STATUS));
                 String photo = dataCursor.getString(dataCursor.getColumnIndex(COLUMN_NAME_PHOTO));
-                fugitivos.add(new Fugitivo(id,name,status, photo));
+                String latitude = dataCursor.getString(dataCursor.getColumnIndex(COLUMN_NAME_LATITUDE));
+                String longitude = dataCursor.getString(dataCursor.getColumnIndex(COLUMN_NAME_LONGITUDE));
+                fugitivos.add(new Fugitivo(id,name,status, photo, latitude, longitude));
             }
         }
         close();
@@ -92,6 +98,8 @@ public class DBProvider {
         values.put(COLUMN_NAME_NAME, fugitivo.getName());
         values.put(COLUMN_NAME_STATUS, fugitivo.getStatus());
         values.put(COLUMN_NAME_PHOTO, fugitivo.getPhoto());
+        values.put(COLUMN_NAME_LATITUDE, fugitivo.getLatitude());
+        values.put(COLUMN_NAME_LONGITUDE, fugitivo.getLongitude());
         open();
         database.insert(TABLE_NAME,null,values);
         close();
@@ -103,6 +111,8 @@ public class DBProvider {
         values.put(COLUMN_NAME_NAME, fugitivo.getName());
         values.put(COLUMN_NAME_STATUS, fugitivo.getStatus());
         values.put(COLUMN_NAME_PHOTO, fugitivo.getPhoto());
+        values.put(COLUMN_NAME_LATITUDE, fugitivo.getLatitude());
+        values.put(COLUMN_NAME_LONGITUDE, fugitivo.getLongitude());
         database.update(TABLE_NAME,values,COLUMN_NAME_NAME + "=?",new String[]{String.valueOf(fugitivo.getName())});
         close();
     }
